@@ -37,7 +37,11 @@ def clamp01(x):
 
 
 def ewma_sigma(prices, window=WINDOW, lam=LAMBDA, blend=BLEND, floor=FLOOR):
-    """EWMA standard deviation of minute diffs over the trailing window."""
+    """EWMA standard deviation of minute diffs over the trailing window.
+
+    Only diffs between consecutive observations count; missing minutes simply
+    shorten the effective window rather than being treated as zero moves.
+    """
     diffs = [prices[i + 1] - prices[i] for i in range(max(0, len(prices) - window), len(prices) - 1)]
     if not diffs:
         diffs = [0.0]
